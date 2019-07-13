@@ -1,7 +1,9 @@
 const path = require("path");
 const Koa = require("koa");
-const configMiddleware = require("./middleware/config.middleware");
-const postmanMiddleware = require("./middleware/postman.middleware");
+const createKnex = require("knex");
+const objection = require("objection");
+const configMiddleware = require("./middlewares/config");
+const postmanMiddleware = require("./middlewares/postman");
 
 const app = new Koa();
 
@@ -15,6 +17,11 @@ app.use(
     )
   )
 );
+app.use(async (ctx, next) => {
+  const knex = createKnex(ctx.$config["db"]);
+  objection.Model.knex(knex);
+  await next();
+});
 
 app.use((ctx, next) => {
   postmanMiddleware(ctx.$config["email"])(ctx, next);

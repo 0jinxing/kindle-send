@@ -7,5 +7,12 @@
       "user": "172601673",
       "pass": "zwxrqtkqqzchbgdb"
     }
+  },
+  "db": {
+    "client": "sqlite3",
+    "useNullAsDefault": true,
+    "connection": {
+      "filename": "data/kindle_send.db"
+    }
   }
 }

@@ -12,10 +12,18 @@ class Sha1 extends Model {
       type: "object",
       required: ["sha1", "filename", "ext"],
       properties: {
-        id: { type: "integer" },
-        sha1: { type: "string" },
-        filename: { type: "string" },
-        ext: { type: "string" }
+        id: {
+          type: "integer"
+        },
+        ext: {
+          type: "string"
+        },
+        sha1: {
+          type: "string"
+        },
+        filename: {
+          type: "string"
+        }
       }
     };
   }
