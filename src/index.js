@@ -1,9 +1,12 @@
 const path = require("path");
 const Koa = require("koa");
+const serve = require("koa-static");
+const bodyParser = require("koa-bodyparser");
 const createKnex = require("knex");
 const objection = require("objection");
 const configMiddleware = require("./middlewares/config");
 const postmanMiddleware = require("./middlewares/postman");
+const router = require("./router");
 
 const app = new Koa();
 
@@ -17,12 +20,27 @@ app.use(
     )
   )
 );
+
+app.use(
+  bodyParser({
+    formLimit: "300MB"
+  })
+);
+
 app.use(async (ctx, next) => {
   const knex = createKnex(ctx.$config["db"]);
   objection.Model.knex(knex);
   await next();
 });
 
-app.use((ctx, next) => {
-  postmanMiddleware(ctx.$config["email"])(ctx, next);
+app.use(async (ctx, next) => {
+  await postmanMiddleware(ctx.$config["email"])(ctx, next);
+});
+
+app.use(serve(path.resolve("dist")));
+
+app.use(router.routes()).use(router.allowedMethods());
+
+app.listen(3000, () => {
+  console.log("listen localhost:3000");
 });

@@ -14,5 +14,6 @@
     "connection": {
       "filename": "data/kindle_send.db"
     }
-  }
+  },
+  "upload": "upload"
 }

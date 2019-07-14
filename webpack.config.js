@@ -1,6 +1,9 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+
+const PRODUCTION = process.env.NODE_ENV === "production";
 
 module.exports = {
   entry: path.resolve("client", "index.js"),
@@ -8,7 +11,7 @@ module.exports = {
     filename: "[name].[hash:4].js",
     path: path.resolve("dist")
   },
-  mode: "development",
+  mode: PRODUCTION ? "production" : "development",
   module: {
     rules: [
       {
@@ -17,18 +20,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: [MiniCssExtractPlugin.loader, "css-loader"]
       },
       {
         test: /\.(png|jpg|gif)$/i,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              limit: 8192
-            }
-          }
-        ]
+        use: ["url-loader"]
       }
     ]
   },
@@ -40,6 +36,17 @@ module.exports = {
         ignore: path.resolve("public", "index.html")
       }
     ]),
-    new HtmlWebpackPlugin({ template: path.resolve("public", "index.html") })
-  ]
+    new HtmlWebpackPlugin({ template: path.resolve("public", "index.html") }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
+    })
+  ],
+  devServer: {
+    port: 8000,
+    contentBase: path.resolve("dist"),
+    proxy: {
+      "/api": "http://127.0.0.1:3000"
+    }
+  }
 };
