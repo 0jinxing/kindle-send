@@ -21,11 +21,7 @@ app.use(
   )
 );
 
-app.use(
-  bodyParser({
-    formLimit: "300MB"
-  })
-);
+app.use(bodyParser());
 
 app.use(async (ctx, next) => {
   const knex = createKnex(ctx.$config["db"]);

@@ -42,11 +42,17 @@ module.exports = {
       chunkFilename: "[id].css"
     })
   ],
+  optimization: {
+    minimize: true
+  },
   devServer: {
     port: 8000,
     contentBase: path.resolve("dist"),
     proxy: {
-      "/api": "http://127.0.0.1:3000"
+      "/api": {
+        target: "http://127.0.0.1:3000",
+        changeOrigin: true
+      }
     }
   }
 };
