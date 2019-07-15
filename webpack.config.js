@@ -1,10 +1,13 @@
 const path = require("path");
-const fileUpload = require("express-fileupload");
+const upload = require("express-fileupload");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 const PRODUCTION = process.env.NODE_ENV === "production";
+const config = require(`./config/${
+  PRODUCTION ? "production.json" : "development.json"
+}`);
 
 module.exports = {
   entry: path.resolve("client", "index.js"),
@@ -55,12 +58,9 @@ module.exports = {
         changeOrigin: true
       }
     },
-    setup: app => {
-      app.use(
-        fileUpload({
-          limits: { fileSize: 50 * 1024 * 1024 * 1024 }
-        })
-      );
+    before: app => {
+      const limit = config.upload.limit;
+      app.use(upload({ limits: { fileSize: limit } }));
     }
   }
 };

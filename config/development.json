@@ -15,5 +15,9 @@
       "filename": "data/kindle_send.db"
     }
   },
-  "upload": "upload"
+  "upload": {
+    "limit": 1048576000,
+    "path": "upload",
+    "temp": "temp"
+  }
 }
