@@ -5,9 +5,11 @@
   "author": "Jinxing Lin <172601673@qq.com>",
   "license": "MIT",
   "scripts": {
+    "start": "npm-run-all --parallel start:*",
     "start:server": "nodemon src/index.js",
     "build:client": "webpack",
-    "start:client": "webpack-dev-server"
+    "start:client": "webpack-dev-server",
+    "prestart": "webpack"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.17.1",
@@ -32,12 +34,16 @@
     "@babel/preset-react": "^7.0.0",
     "@types/sqlite3": "^3.1.5",
     "babel-loader": "^8.0.6",
+    "body-parser": "^1.19.0",
     "copy-webpack-plugin": "^5.0.3",
     "css-loader": "^3.0.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5",
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.7.0",
     "nodemon": "^1.19.1",
+    "npm-run-all": "^4.1.5",
     "url-loader": "^2.0.1",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5",

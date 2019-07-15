@@ -1,4 +1,6 @@
 const path = require("path");
+const fileUpload = require("express-fileupload");
+const express = require("express");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
@@ -53,6 +55,13 @@ module.exports = {
         target: "http://127.0.0.1:3000",
         changeOrigin: true
       }
+    },
+    setup: app => {
+      app.use(
+        fileUpload({
+          limits: { fileSize: 50 * 1024 * 1024 * 1024 }
+        })
+      );
     }
   }
 };
