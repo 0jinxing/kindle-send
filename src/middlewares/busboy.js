@@ -83,9 +83,7 @@ module.exports = (opts = {}) => {
       ...ctx.$config["busboy"],
       ...opts
     });
-    ctx.body = files.map(
-      file => console.log(file) || { [file.filename]: file.md5 }
-    );
+    ctx.body = files.map(file => file.md5).join(".");
     await next();
   };
 };

@@ -52,6 +52,7 @@ const App = () => {
           server={{
             url: "/api/upload"
           }}
+          allowMultiple
         />
         <InputGroup
           placeholder="输入你的 kindle 邮箱"
