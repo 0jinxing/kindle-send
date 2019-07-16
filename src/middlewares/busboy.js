@@ -41,11 +41,11 @@ const extract = (req, dest, opts = {}) => {
               }
               _resolve({
                 md5,
-                fieldname,
+                dest,
                 filename,
+                fieldname,
                 encoding,
-                mimetype,
-                path: uploadPath
+                mimetype
               });
             });
         })
