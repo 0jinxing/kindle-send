@@ -17,7 +17,7 @@ const extract = (req, dest, fnDestFilename, opts = {}) => {
       if (!filename) return file.resume();
       files.push(
         new Promise((_resolve, _reject) => {
-          const tmpName = fnDestFilename(fieldname, fieldname);
+          const tmpName = fnDestFilename(fieldname, filename);
           const tmpPath = path.join(dest, path.basename(tmpName));
 
           file
@@ -70,7 +70,7 @@ module.exports = (opts = {}) => {
   const {
     dest = os.tmpdir(),
     fnDestFilename = (fieldname, filename) => {
-      return Date.now() + fieldname + filename;
+      return Date().toLocaleString().replace(/\s/g, "_") + fieldname + filename;
     }
   } = opts;
   return async (ctx, next) => {
