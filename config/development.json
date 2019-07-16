@@ -15,9 +15,9 @@
       "filename": "data/kindle_send.db"
     }
   },
-  "upload": {
-    "limit": 1048576000,
-    "path": "upload",
-    "temp": "temp"
+  "busboy": {
+    "limits": {
+      "fileSize": 104857600
+    }
   }
 }

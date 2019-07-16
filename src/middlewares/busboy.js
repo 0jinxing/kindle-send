@@ -10,8 +10,7 @@ const extract = (req, dest, fnDestFilename, opts = {}) => {
     const fields = {};
     const busboy = new Busboy({
       ...opts,
-      headers: req.headers,
-      limits: { fileSize: 1048576000 }
+      headers: req.headers
     });
 
     busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
@@ -78,12 +77,10 @@ module.exports = (opts = {}) => {
     if (!ctx.is("multipart")) {
       return await next();
     }
-    const { files, fields } = await extract(
-      ctx.req,
-      dest,
-      fnDestFilename,
-      opts
-    );
+    const { files, fields } = await extract(ctx.req, dest, fnDestFilename, {
+      ...ctx.$config["busboy"],
+      ...opts
+    });
     ctx.request.body = fields;
     ctx.request.files = files;
 
