@@ -1,23 +1,15 @@
 const createBusboy = require("../middlewares/busboy");
 
-const busboy = createBusboy({
-  dest: "./upload",
-  fnDestFilename: (fieldname, filename) =>
-    Math.random()
-      .toString(16)
-      .slice(2) + filename
-});
-
-const upload = async ctx => {
-  console.log(ctx.request.method);
-  ctx.body = { status: 10200 };
+const upload = async (ctx, next) => {
+  const fn = createBusboy(ctx.$config["busboy"]);
+  await fn(ctx, next);
 };
 
 module.exports = [
   {
     method: "POST",
     path: "/api/upload",
-    handle: busboy
+    handle: upload
   },
   {
     method: "GET",

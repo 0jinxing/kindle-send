@@ -50,10 +50,8 @@ const App = () => {
       <main>
         <FilePond
           server={{
-            url: "/api/upload",
-            timeout: 6000
+            url: "/api/upload"
           }}
-          allowMultiple
         />
         <InputGroup
           placeholder="输入你的 kindle 邮箱"

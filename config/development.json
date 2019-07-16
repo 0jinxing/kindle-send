@@ -16,6 +16,7 @@
     }
   },
   "busboy": {
+    "dest": "upload",
     "limits": {
       "fileSize": 104857600
     }

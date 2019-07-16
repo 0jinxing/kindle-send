@@ -1,62 +1,70 @@
-const os = require("os");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const Busboy = require("busboy");
-const appendField = require("append-field");
 
-const extract = (req, dest, fnDestFilename, opts = {}) => {
+const extract = (req, dest, opts = {}) => {
   return new Promise((resolve, reject) => {
     const files = [];
-    const fields = {};
+
     const busboy = new Busboy({
       ...opts,
       headers: req.headers
     });
 
     busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-      if (!filename) return file.resume();
       files.push(
         new Promise((_resolve, _reject) => {
-          const tmpName = fnDestFilename(fieldname, filename);
-          const tmpPath = path.join(dest, path.basename(tmpName));
+          const uploadPath = path.resolve(dest);
 
+          const tmpName = Date.now() + filename;
+          const tmpFullname = path.resolve(uploadPath, path.basename(tmpName));
+
+          const md5Hash = crypto.createHash("md5");
+
+          if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+          }
           file
-            .pipe(fs.createWriteStream(tmpPath))
+            .on("data", data => md5Hash.update(data))
+            .pipe(fs.createWriteStream(tmpFullname))
             .on("error", _reject)
             .on("finish", () => {
-              const rs = fs.createReadStream(tmpPath);
-              rs.filename = fieldname;
-              rs.encoding = encoding;
-              rs.mimetype = mimetype;
-              _resolve(rs);
+              const md5 = md5Hash.digest("hex");
+              const md5Name = `${md5}${path.extname(filename)}`;
+              const md5Fullname = path.resolve(uploadPath, md5Name);
+              // WARN: md5 碰撞
+              if (fs.existsSync(md5Fullname)) {
+                fs.unlinkSync(tmpFullname);
+              } else {
+                fs.renameSync(tmpFullname, md5Fullname);
+              }
+              _resolve({
+                md5,
+                fieldname,
+                filename,
+                encoding,
+                mimetype,
+                path: uploadPath
+              });
             });
         })
       );
-    });
-
-    busboy.on("field", (fieldname, val) => {
-      if (Object.getOwnPropertyDescriptor(Object.prototype, fieldname)) {
-        fieldname = "_" + fieldname;
-      }
-      appendField(fields, fieldname, val);
     });
 
     busboy.on("finish", () => {
       if (files.length) {
         Promise.all(files)
           .then(files => {
-            resolve({ fields, files });
+            resolve(files);
           })
           .catch(reject);
       } else {
-        resolve({ fields, fields });
+        resolve(files);
       }
     });
 
     busboy.on("error", reject);
-    busboy.on("partsLimit", () => reject(new Error("LIMIT_PART_COUNT")));
-    busboy.on("filesLimit", () => reject(new Error("LIMIT_FILE_COUNT")));
-    busboy.on("fieldsLimit", () => reject(new Error("LIMIT_FIELD_COUNT")));
 
     if (req.rawBody) {
       busboy.end(req.rawBody);
@@ -67,23 +75,17 @@ const extract = (req, dest, fnDestFilename, opts = {}) => {
 };
 
 module.exports = (opts = {}) => {
-  const {
-    dest = os.tmpdir(),
-    fnDestFilename = (fieldname, filename) => {
-      return Date().toLocaleString().replace(/\s/g, "_") + fieldname + filename;
-    }
-  } = opts;
   return async (ctx, next) => {
     if (!ctx.is("multipart")) {
       return await next();
     }
-    const { files, fields } = await extract(ctx.req, dest, fnDestFilename, {
+    const files = await extract(ctx.req, opts.dest, {
       ...ctx.$config["busboy"],
       ...opts
     });
-    ctx.request.body = fields;
-    ctx.request.files = files;
-
+    ctx.body = files.map(
+      file => console.log(file) || { [file.filename]: file.md5 }
+    );
     await next();
   };
 };
