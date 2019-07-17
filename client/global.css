@@ -1,3 +1,20 @@
+html,
+body,
+#root {
+  background: #fff;
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  margin-top: -12vh;
+}
+
 .filepond--root.filepond--hopper {
   margin-bottom: 0;
+}
+
+.bp3-dialog {
+  max-width: 64vw;
 }
