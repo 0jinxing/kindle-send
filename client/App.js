@@ -1,9 +1,27 @@
-import React from "react";
-import { Button, InputGroup, Checkbox, Intent } from "@blueprintjs/core";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  InputGroup,
+  Checkbox,
+  Intent,
+  FormGroup
+} from "@blueprintjs/core";
 import { FilePond } from "react-filepond";
 import logoImg from "./assets/logo.png";
 
-const App = () => {
+// @TODO
+const App1 = () => {
+  const [files, setFiles] = useState([]);
+  const [email, setEmail] = useState("");
+  const [convert, setConvert] = useState(false);
+
+  const [hasSubmit, setHasSubmit] = useState(false);
+
+  const handleSubmit = () => {
+    setHasSubmit(true);
+    // @TODO
+  };
+
   return (
     <div
       style={{
@@ -48,28 +66,53 @@ const App = () => {
         </h1>
       </header>
       <main>
-        <FilePond
-          server={{
-            url: "/api/upload"
-          }}
-          allowMultiple
-        />
-        <InputGroup
-          placeholder="输入你的 kindle 邮箱"
-          leftIcon="envelope"
-          style={{
-            marginBottom: "1em"
-          }}
-          large
-        />
+        <FormGroup
+          helperText={"请上传需要推送的文件"}
+          label="推送的文件"
+          labelFor="file-upload"
+          intent={Intent.DANGER}
+        >
+          <FilePond
+            id="file-upload"
+            server={{
+              process: "/api/upload",
+              fetch: null,
+              revert: null
+            }}
+            allowMultiple
+            onupdatefiles={files => {
+              console.log(files.map(file => file.serverId));
+              console.log(files);
+              // setFiles(files);
+              // setFiles(files.map(file => file.serverId));
+            }}
+          />
+        </FormGroup>
+        <FormGroup
+          helperText={"请输入正确的邮箱"}
+          label="kindle 邮箱"
+          labelFor="email-input"
+          intent={Intent.DANGER}
+        >
+          <InputGroup
+            value={email}
+            onChange={setEmail}
+            id="email-input"
+            placeholder="输入你的 kindle 邮箱"
+            leftIcon="envelope"
+            large
+          />
+        </FormGroup>
+
         <Checkbox
+          checked={convert}
+          onChange={setConvert}
           label="格式转换"
           style={{
             marginBottom: "1em"
           }}
         />
-
-        <Button fill intent={Intent.PRIMARY}>
+        <Button fill large intent={Intent.PRIMARY} onClick={handleSubmit}>
           确认
         </Button>
       </main>
@@ -77,4 +120,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App1;

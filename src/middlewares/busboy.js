@@ -89,7 +89,7 @@ const extract = (req, dest, opts = {}) => {
 };
 
 module.exports = (opts = {}) => {
-  return async (ctx, next) => {
+  return async ctx => {
     if (!ctx.is("multipart")) {
       return await next();
     }
@@ -97,8 +97,10 @@ module.exports = (opts = {}) => {
       ...ctx.$config["busboy"],
       ...opts
     });
-    
+    ctx.$models["_md5"]
+      .query()
+      .insert(files.map(file => ({ md5: file.md5, filename: file.filename })));
+
     ctx.body = files.map(file => file.md5).join(".");
-    await next();
   };
 };

@@ -15,7 +15,6 @@ const knex = createKnex(config["db"]);
       table.increments("id").primary();
       table.string("md5").notNullable();
       table.string("filename").notNullable();
-      table.string("ext").notNullable();
     });
   }
   knex.destroy();

@@ -10,7 +10,7 @@ class Md5 extends Model {
   static get jsonSchema() {
     return {
       type: "object",
-      required: ["id", "md5", "filename", "ext"],
+      required: ["md5", "filename"],
       properties: {
         id: {
           type: "integer"
@@ -19,9 +19,6 @@ class Md5 extends Model {
           type: "string"
         },
         filename: {
-          type: "string"
-        },
-        ext: {
           type: "string"
         }
       }

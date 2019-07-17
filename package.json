@@ -5,10 +5,10 @@
   "author": "Jinxing Lin <172601673@qq.com>",
   "license": "MIT",
   "scripts": {
-    "start": "npm-run-all --parallel start:*",
+    "start": "npm-run-all --parallel start:server build:watch",
     "start:server": "nodemon src/index.js",
-    "build:client": "webpack",
     "start:client": "webpack-dev-server",
+    "build:watch": "webpack --watch",
     "prestart": "webpack"
   },
   "dependencies": {
