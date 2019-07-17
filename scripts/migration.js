@@ -10,12 +10,12 @@ const config = require(configPath);
 const knex = createKnex(config["db"]);
 
 (async () => {
-  if (!(await knex.schema.hasTable("sha1"))) {
-    await knex.schema.createTable("sha1", table => {
+  if (!(await knex.schema.hasTable("md5"))) {
+    await knex.schema.createTable("md5", table => {
       table.increments("id").primary();
-      table.string("sha1");
-      table.string("filename");
-      table.string("ext");
+      table.string("md5").notNullable();
+      table.string("filename").notNullable();
+      table.string("ext").notNullable();
     });
   }
   knex.destroy();

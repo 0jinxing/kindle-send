@@ -12,7 +12,7 @@
     "client": "sqlite3",
     "useNullAsDefault": true,
     "connection": {
-      "filename": "data/kindle_send.db"
+      "filename": "data.db"
     }
   },
   "busboy": {

@@ -1,8 +1,8 @@
 const { Model } = require("objection");
 
-class Sha1 extends Model {
+class Md5 extends Model {
   static get tableName() {
-    return "sha1";
+    return "Md5";
   }
   static get idColumn() {
     return "id";
@@ -10,18 +10,18 @@ class Sha1 extends Model {
   static get jsonSchema() {
     return {
       type: "object",
-      required: ["sha1", "filename", "ext"],
+      required: ["id", "md5", "filename", "ext"],
       properties: {
         id: {
           type: "integer"
         },
-        ext: {
-          type: "string"
-        },
-        sha1: {
+        md5: {
           type: "string"
         },
         filename: {
+          type: "string"
+        },
+        ext: {
           type: "string"
         }
       }
@@ -29,4 +29,4 @@ class Sha1 extends Model {
   }
 }
 
-module.exports = Sha1;
+module.exports = Md5;

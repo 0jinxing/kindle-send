@@ -97,6 +97,7 @@ module.exports = (opts = {}) => {
       ...ctx.$config["busboy"],
       ...opts
     });
+    
     ctx.body = files.map(file => file.md5).join(".");
     await next();
   };
