@@ -10,10 +10,5 @@ module.exports = [
     method: "POST",
     path: "/api/upload",
     handle: upload
-  },
-  {
-    method: "GET",
-    path: "/api/upload",
-    handle: upload
   }
 ];

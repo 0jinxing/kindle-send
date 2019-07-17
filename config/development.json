@@ -1,5 +1,6 @@
 {
   "email": {
+    "from": "kindle send <172601673@qq.com>",
     "host": "smtp.qq.com",
     "port": 465,
     "secure": true,
