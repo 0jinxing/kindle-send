@@ -1,7 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const util = require("util");
 const Busboy = require("busboy");
+
+const fsMkdir = util.promisify(fs.mkdir);
+const fsExists = util.promisify(fs.exists);
+const fsRename = util.promisify(fs.rename);
+const fsUnlink = util.promisify(fs.unlink);
 
 const extract = (req, dest, opts = {}) => {
   return new Promise((resolve, reject) => {
@@ -22,32 +28,40 @@ const extract = (req, dest, opts = {}) => {
 
           const md5Hash = crypto.createHash("md5");
 
-          if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
-          }
-          file
-            .on("data", data => md5Hash.update(data))
-            .pipe(fs.createWriteStream(tmpFullname))
-            .on("error", _reject)
-            .on("finish", () => {
-              const md5 = md5Hash.digest("hex");
-              const md5Name = `${md5}${path.extname(filename)}`;
-              const md5Fullname = path.resolve(uploadPath, md5Name);
-              // WARN: md5 碰撞
-              if (fs.existsSync(md5Fullname)) {
-                fs.unlinkSync(tmpFullname);
-              } else {
-                fs.renameSync(tmpFullname, md5Fullname);
-              }
-              _resolve({
-                md5,
-                dest,
-                filename,
-                fieldname,
-                encoding,
-                mimetype
-              });
-            });
+          fsExists(uploadPath)
+            .then(exists => {
+              if (exists) return;
+              else return fsMkdir(uploadPath, { recursive: true });
+            })
+            .then(() => {
+              file
+                .on("data", data => md5Hash.update(data))
+                .pipe(fs.createWriteStream(tmpFullname))
+                .on("error", _reject)
+                .on("finish", () => {
+                  const md5 = md5Hash.digest("hex");
+                  const md5Fullname = path.resolve(uploadPath, md5);
+
+                  fsExists(md5Fullname)
+                    .then(exists => {
+                      return exists
+                        ? fsUnlink(tmpFullname)
+                        : fsRename(tmpFullname, md5Fullname);
+                    })
+                    .then(() => {
+                      _resolve({
+                        md5,
+                        dest,
+                        filename,
+                        fieldname,
+                        encoding,
+                        mimetype
+                      });
+                    })
+                    .catch(_reject);
+                });
+            })
+            .catch(_reject);
         })
       );
     });
