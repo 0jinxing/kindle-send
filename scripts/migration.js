@@ -1,13 +1,12 @@
 const path = require("path");
 const createKnex = require("knex");
 
-const configPath = path.resolve(
+const $config = require(path.resolve(
   "config",
   process.env.NODE_ENV === "production" ? "production.json" : "development.json"
-);
+));
 
-const config = require(configPath);
-const knex = createKnex(config["db"]);
+const knex = createKnex($config["db"]);
 
 (async () => {
   if (!(await knex.schema.hasTable("md5"))) {

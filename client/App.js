@@ -12,7 +12,7 @@ import axios from "axios";
 import { FilePond } from "react-filepond";
 import logoImg from "./assets/logo.png";
 
-const emailRegExp = /\S+@\S+\.\S+/;
+const emailRegExp = /\S+@kindle\.\S+/i;
 
 class App extends React.Component {
   state = {
