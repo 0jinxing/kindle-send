@@ -12,7 +12,11 @@ const Message = types
     attachments: types.array(File),
     subject: types.string
   })
-  .actions(self => ({}));
+  .actions(self => ({
+    push: () => {
+      
+    }
+  }));
 
 const RootStore = types.model("Store", {
   message: Message
