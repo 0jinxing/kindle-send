@@ -1,6 +1,5 @@
 node_modules
 dist
-
 upload
-
 data.db
+**/__snapshots__

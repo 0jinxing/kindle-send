@@ -10,7 +10,8 @@ import {
 } from "@blueprintjs/core";
 import axios from "axios";
 import { FilePond } from "react-filepond";
-import logoImg from "./assets/logo.png";
+import Header from "./components/Header";
+import Layout from "./components/Layout";
 
 const emailRegExp = /\S+@kindle\.\S+/i;
 
@@ -78,48 +79,8 @@ class App extends React.Component {
     const { files, email, convert, first } = this.state;
 
     return (
-      <div
-        style={{
-          maxWidth: "360px",
-          margin: "auto",
-          padding: "0 16px"
-        }}
-      >
-        <header
-          style={{
-            display: "flex",
-            justifyContent: "left",
-            alignItems: "center",
-            marginBottom: "16px"
-          }}
-        >
-          <img
-            src={logoImg}
-            alt="logo"
-            style={{
-              width: "100px"
-            }}
-          />
-          <h1
-            style={{
-              fontSize: "24px",
-              fontWeight: "normal",
-              display: "flex",
-              flexDirection: "column"
-            }}
-          >
-            给 Kindle，发邮件
-            <span
-              style={{
-                fontSize: "14px",
-                color: "#666",
-                marginTop: "4px"
-              }}
-            >
-              快捷的 kindle 邮件推送工具
-            </span>
-          </h1>
-        </header>
+      <Layout>
+        <Header />
         <main>
           <FormGroup
             helperText={
@@ -190,7 +151,7 @@ class App extends React.Component {
           position={Position.TOP}
           ref={toaster => (this.toaster = toaster)}
         />
-      </div>
+      </Layout>
     );
   }
 }
