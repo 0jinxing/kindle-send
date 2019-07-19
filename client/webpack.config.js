@@ -6,7 +6,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const PRODUCTION = process.env.NODE_ENV === "production";
 
 module.exports = {
-  entry: path.resolve("client", "polyfills.js"),
+  entry: path.resolve("client", "polyfills.ts"),
   output: {
     filename: "[name].[hash:4].js",
     path: path.resolve("dist")
