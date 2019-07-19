@@ -1,4 +1,4 @@
-import { types } from "mobx-state-tree";
+import { types, flow } from "mobx-state-tree";
 
 const File = types.model("File", {
   md5: types.string,
@@ -13,9 +13,9 @@ const Message = types
     subject: types.string
   })
   .actions(self => ({
-    push: () => {
+    push: flow(function*() {
       
-    }
+    })
   }));
 
 const RootStore = types.model("Store", {

@@ -6,7 +6,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const PRODUCTION = process.env.NODE_ENV === "production";
 
 module.exports = {
-  entry: path.resolve("polyfills.js"),
+  entry: path.resolve("client", "polyfills.js"),
   output: {
     filename: "[name].[hash:4].js",
     path: path.resolve("dist")
@@ -16,7 +16,14 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        use: ["babel-loader"]
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              configFile: path.resolve("client", "babel.config.js")
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,
