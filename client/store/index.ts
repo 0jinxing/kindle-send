@@ -1,4 +1,6 @@
 import { types, flow } from "mobx-state-tree";
+import { AxiosResponse } from "axios";
+import push, { PushData } from "../apis/push";
 
 const File = types.model("File", {
   md5: types.string,
@@ -7,14 +9,22 @@ const File = types.model("File", {
 
 const Message = types
   .model("Message", {
-    from: types.string,
     to: types.string,
     attachments: types.array(File),
     subject: types.string
   })
   .actions(self => ({
-    push: flow(function*() {
-      
+    push: flow(function*(data: PushData) {
+      try {
+        const res = (yield push(data)) as AxiosResponse<any>;
+        if (res.data.status === "ok") {
+          // @TODO
+        } else {
+          // @TODO
+        }
+      } catch (error) {
+        // @TODO
+      }
     })
   }));
 

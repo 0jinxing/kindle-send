@@ -1,5 +1,6 @@
 import React from "react";
-import logoImg from "../assets/logo.png";
+
+const logoImage = require("../assets/logo.png");
 
 const Header = () => {
   return (
@@ -12,7 +13,7 @@ const Header = () => {
       }}
     >
       <img
-        src={logoImg}
+        src={logoImage}
         alt="logo"
         style={{
           width: "100px"
