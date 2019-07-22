@@ -61,5 +61,8 @@ module.exports = {
         changeOrigin: true
       }
     }
+  },
+  resolve: {
+    extensions: [".js", ".jsx", "ts", ".tsx"]
   }
 };
