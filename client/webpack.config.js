@@ -26,6 +26,18 @@ module.exports = {
         ]
       },
       {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              configFile: path.resolve("client", "babel.config.js")
+            }
+          },
+          "awesome-typescript-loader"
+        ]
+      },
+      {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, "css-loader"]
       },
