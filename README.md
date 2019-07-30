@@ -31,5 +31,5 @@ $ yarn start # listen localhost:3000
 ## Preview
 
 <div align=center>
-  <img src="https://raw.githubusercontent.com/0jinxing/kindle-send/master/docs/preview.png" width="200" alt="preview"/>
+  <img src="https://raw.githubusercontent.com/0jinxing/kindle-send/master/docs/preview.png" alt="preview"/>
 </div>
